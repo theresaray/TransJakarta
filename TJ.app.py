@@ -58,6 +58,7 @@ if st.session_state.page == 'login':
 # REGISTER PAGE
 # ==========================
 elif st.session_state.page == 'register':
+    st.title("🚍 TransJakarta Travel Tracker")
     st.header("📝 Registrasi Pengguna Baru")
     new_id = st.text_input("PayUserID")
     type_card = st.selectbox("Jenis Kartu", sorted(df['typeCard'].dropna().unique()))
@@ -84,9 +85,7 @@ elif st.session_state.page == 'register':
             """, (new_id, type_card, name.strip(), sex, int(birth_year)))
             conn.commit()
 
-            # Update users_df agar bisa login langsung
             users_df.loc[len(users_df)] = [new_id, type_card, name.strip(), sex, birth_year]
-
             st.success("Registrasi berhasil!")
             st.session_state.page = 'login'
 
@@ -97,6 +96,7 @@ elif st.session_state.page == 'register':
 # MAIN MENU
 # ==========================
 elif st.session_state.page == 'main_menu':
+    st.title("🚍 TransJakarta Travel Tracker")
     user = users_df[users_df['payUserID'] == st.session_state.user_id].iloc[0]
     st.success(f"👋 Selamat datang, {user['userName']}!")
 
@@ -116,6 +116,7 @@ elif st.session_state.page == 'main_menu':
 # HISTORY PAGE
 # ==========================
 elif st.session_state.page == 'history':
+    st.title("🚍 TransJakarta Travel Tracker")
     st.header("📜 Riwayat Perjalanan")
     user = users_df[users_df['payUserID'] == st.session_state.user_id].iloc[0]
 
@@ -127,7 +128,7 @@ elif st.session_state.page == 'history':
     """)
 
     user_data = pd.read_sql_query("""
-        SELECT transID, routeID, transDate, tapInTime, tapOutTime, duration, direction
+        SELECT transID, routeName, transDate, tapInTime, tapOutTime, duration, direction
         FROM transjakarta WHERE payUserID = ?
     """, conn, params=(st.session_state.user_id,))
 
@@ -143,6 +144,7 @@ elif st.session_state.page == 'history':
 # CORRIDOR PAGE
 # ==========================
 elif st.session_state.page == 'corridor':
+    st.title("🚍 TransJakarta Travel Tracker")
     st.header("🛣️ Cari Kode Koridor")
     selected = st.selectbox("Pilih Rute", sorted(df['routeName'].dropna().unique()))
 
